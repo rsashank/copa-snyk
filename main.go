@@ -70,6 +70,13 @@ func main() {
 	}
 
 	for _, vuln := range report.Vulnerabilities {
+		if manifest.Metadata.OS.Type == "" && manifest.Metadata.OS.Version == "" {
+			if parts := strings.SplitN(vuln.PackageManager, ":", 2); len(parts) == 2 {
+				manifest.Metadata.OS.Type = parts[0]
+				manifest.Metadata.OS.Version = parts[1]
+			}
+		}
+
 		if !vuln.IsUpgradable {
 			continue
 		}
